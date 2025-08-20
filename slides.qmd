@@ -1,0 +1,223 @@
+---
+title: "Shinyscholar"
+subtitle: "A template for creating reproducible Shiny applications"
+author: "Simon Smart and Tim Lucas"
+format: 
+  revealjs:
+    logo: images/uol_logo.png
+    code-line-numbers: false
+    theme: [default, custom.scss]
+    chalkboard: true
+    width: 1600  
+    height: 900
+    scale: true
+    slide-number: true
+date: "9 September 2025"
+---
+
+## Shinyscholar helps create reproducible analytical apps in R {.mediumtext}
+
+::: columns
+::: {.column width="70%"}
+-   Creates an empty application with a regular structure
+-   Analyses can be reproduced outside the app
+-   Make it easier to follow software development best practices
+-   Developers can concentrate on creating functionality 
+:::
+::: {.column width="30%"}
+<img src="images/ss_logo.png" width="auto" height="auto" align="right" alt="Hexlogo of shinyscholar showing a black and white mortar cap">
+:::
+:::
+
+::: notes
+
+Testing, modularised, maintainable
+
+:::
+
+
+## R is very powerful but barriers can restrict uptake
+
+- Have to know how to use R
+- Need access to specific data
+- Data needs to be formatted in specific ways
+
+::: notes
+
+Especially targeting technical users, but who might not code. Conservationists, analysts, medical practitioners 
+
+:::
+
+## Shiny apps enable anybody to access the power of R {.mediumcode}
+
+::: columns
+::: {.column width="75%"}
+<br/>
+```{r eval = FALSE, echo = TRUE}
+ui <- fluidPage(
+  numericInput("number", "Enter a number", value = 5),
+  textOutput("answer"))
+
+server <- function(input, output) {
+  output$answer <- renderText(input$number * 10)
+}
+
+shinyApp(ui, server)
+```
+:::
+::: {.column width="25%"}
+<br/>
+<img src="images/basic_app.png" class="centre_image" alt="A screenshot of a basic shiny app displaying an input box to enter a number in and an output displaying the inputted number multiplied by ten.">
+:::
+:::
+
+## Shiny apps are becoming increasingly popular in academia
+
+::: columns
+::: {.column width="55%"}
+-   The low barrier to entry makes Shiny popular
+-   Substantially increased apps as a method of dissemination
+-   "shiny app" or "shiny application" in Web of Science:
+:::
+
+::: {.column width="45%"}
+```{r echo = FALSE, fig.height=10}
+year <- c(2012, 2015:2023) 
+apps <- c(1, 4, 3, 12, 17, 39, 69, 75, 100, 134)
+mod <- lm(log(apps) ~ year)
+
+par(cex = 1.5, bg = '#e4fbf8')
+plot(year, apps, pch = 16, xlab = '', ylab = 'Number of publications')
+lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0.1)))), col = 'blue')
+```
+:::
+:::
+
+::: {.notes}
+- Easier to develop than using other web frameworks
+- Existing code can be adapted
+:::
+
+## 50 apps published in 2023 were surveyed to determine current practices
+
+<img src="images/app_features.svg" class="centre_image" >
+
+## Wallace is an app for modelling species distributions
+<img src="images/wallace.png" class="centre_image" >
+
+## Wallace is an app for modelling species distributions
+
+-   In development since 2015 with two major releases
+-   Feature-rich with many ideal characteristics:
+
+::: columns
+::: {.column width="50%"}
+-   Error messages
+-   Logging
+-   Save and load
+:::
+::: {.column width="50%"}
+-   Reproducible
+-   Cites packages used
+:::
+:::
+
+::: footer
+- `install.packages("wallace")` (not online)
+- Kass *et al.* (2018) <a href="https://doi.org/10.1111/2041-210X.12945" target="_blank">DOI: 10.1111/2041-210X.12945</a>
+- Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a>
+:::
+
+## `create_template()` creates an empty app {.mediumcode}
+
+```{r eval = FALSE, echo = TRUE}
+
+common_objects = c("raster", "histogram", "scatter")
+
+shinyscholar::create_template(
+  path = file.path("~", "Documents"), name = "demo", author = "Simon Smart",
+  include_map = TRUE, include_table = TRUE, include_code = TRUE, 
+  common_objects = common_objects, modules = modules, install = TRUE)
+
+demo::run_demo()
+```
+
+## `create_template()` creates an empty app {.mediumcode}
+
+```{r eval = TRUE, echo = FALSE}
+
+modules <- data.frame(
+"component" = c("load", "load", "plot", "plot"),
+"long_component" = c("Load data", "Load data", "Plot data", "Plot data"),
+"module" = c("user", "database", "histogram", "scatter"),
+"long_module" = c("Upload your own data", "Query a database to obtain data", 
+                  "Plot the data as a histogram", "Plot the data as a scatterplot"),
+"map" = c(TRUE, TRUE, FALSE, FALSE),
+"result" = c(FALSE, FALSE, TRUE, TRUE),
+"rmd" = c(TRUE, TRUE, TRUE, TRUE),
+"save" = c(TRUE, TRUE, TRUE, TRUE),
+"download" = c(FALSE, FALSE, TRUE, TRUE),
+"async" = c(FALSE, TRUE, FALSE, FALSE))
+
+```
+
+```{r val = TRUE, echo = FALSE}
+knitr::kable(modules, format = "html")
+```
+
+## `create_template()` creates an empty app
+
+<img src="images/demo_app.png" class="centre_image" alt="A screenshot of the app running after running the create_template function. A navigation bar at the top enables navigation between components and a menu in the sidebar enables navigation between modules. A logger window is present towards the top of the display and a world map is shown in the main panel." >
+
+## Reproducibiity
+
+- Each module calls one function
+- Input values are stored and incorporated into Rmarkdown
+- Rerunning it outside the app produces the same results
+- `metadata()` takes care of a lot of the boring work
+
+## Disagapp
+
+::: columns
+::: {.column width="80%"}
+<img src="images/disagapp.png" alt="Screenshot of the disagapp app, displaying cases of Malaria in provinces of Madagascar">
+:::
+::: {.column width="20%"}
+<img src="images/disagapp_qr.png" alt="QR code to https://disagapp.le.ac.uk" >
+:::
+:::
+
+## MetaInsight
+
+::: columns
+::: {.column width="80%"}
+<img src="images/metainsight.png">
+:::
+::: {.column width="20%"}
+<img src="images/metainsight_qr.png" alt="QR code to https://crsu.shinyapps.io/MetaInsight_Scholar/">
+:::
+:::
+
+## Learn more
+
+- Install with `install.packages("shinyscholar")`
+- Example app at https://simonsmart.shinyapps.io/shinyscholar/ 
+- README guide to development at https://simon-smart88.github.io/shinyscholar/
+- <a href = "https://sites.google.com/view/dariia-mykhailyshyna/main/r-workshops-for-ukraine#h.svl2ujruwf92">Workshop for Ukraine</a>
+
+## Acknowledgments
+
+::: columns
+::: {.column width="50%"}
+-   Wellcome
+-   Wallace developers
+-   Tim Lucas
+:::
+
+::: {.column width="50%"}
+<div> 
+<img src="images/wellcome_logo.png" width="300" style = "display: block;", alt = "Wellcome logo">
+<img src="images/wallace_logo.png" width="300" style = "display: block;", alt = "Wallace hex logo">
+</div>
+:::
+:::
