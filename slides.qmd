@@ -1,7 +1,7 @@
 ---
 title: "Shinyscholar"
-subtitle: "A template for creating reproducible Shiny applications"
-author: "Simon Smart and Tim Lucas"
+subtitle: "A template for creating reproducible Shiny applications in R"
+author: "Simon Smart and Tim Lucas, School of Medical Sciences, University of Leicester"
 format: 
   revealjs:
     logo: images/uol_logo.png
@@ -25,7 +25,7 @@ date: "9 September 2025"
 -   Developers can concentrate on creating functionality 
 :::
 ::: {.column width="30%"}
-<img src="images/ss_logo.png" width="auto" height="auto" align="right" alt="Hexlogo of shinyscholar showing a black and white mortar cap">
+<img src="images/ss_logo.png" width="auto" height="auto" align="right" alt="Hex logo of shinyscholar showing a black and white mortar cap">
 :::
 :::
 
@@ -35,9 +35,9 @@ Testing, modularised, maintainable
 
 :::
 
-
 ## R is very powerful but barriers can restrict uptake
 
+- The R ecosystem has cutting-edge statistical methods
 - Have to know how to use R
 - Need access to specific data
 - Data needs to be formatted in specific ways
@@ -56,7 +56,8 @@ Especially targeting technical users, but who might not code. Conservationists, 
 ```{r eval = FALSE, echo = TRUE}
 ui <- fluidPage(
   numericInput("number", "Enter a number", value = 5),
-  textOutput("answer"))
+  textOutput("answer")
+)
 
 server <- function(input, output) {
   output$answer <- renderText(input$number * 10)
@@ -67,7 +68,7 @@ shinyApp(ui, server)
 :::
 ::: {.column width="25%"}
 <br/>
-<img src="images/basic_app.png" class="centre_image" alt="A screenshot of a basic shiny app displaying an input box to enter a number in and an output displaying the inputted number multiplied by ten.">
+<img src="images/basic_app.png" alt="A screenshot of a basic shiny app displaying an input box to enter a number in and an output displaying the inputted number multiplied by ten.">
 :::
 :::
 
@@ -81,15 +82,20 @@ shinyApp(ui, server)
 :::
 
 ::: {.column width="45%"}
-```{r echo = FALSE, fig.height=10}
-year <- c(2012, 2015:2023) 
-apps <- c(1, 4, 3, 12, 17, 39, 69, 75, 100, 134)
-mod <- lm(log(apps) ~ year)
+<img src="images/published_apps.png" alt="A scatterplot showing the number of publications mentioning shiny apps from 2015 to 2023 showing exponential growth up to 134 papers in 2023.">
 
-par(cex = 1.5, bg = '#e4fbf8')
-plot(year, apps, pch = 16, xlab = '', ylab = 'Number of publications')
-lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0.1)))), col = 'blue')
+```{r echo = FALSE, fig.height=10}
+# year <- c(2012, 2015:2023)
+# apps <- c(1, 4, 3, 12, 17, 39, 69, 75, 100, 134)
+# mod <- lm(log(apps) ~ year)
+# #
+# png("images/published_apps.png", height = 10, width = 10, units = "in", res = 72 )
+# par(cex = 1.5, bg = '#e4fbf8')
+# plot(year, apps, pch = 16, xlab = '', ylab = 'Number of publications')
+# lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0.1)))), col = 'blue')
+# dev.off()
 ```
+
 :::
 :::
 
@@ -98,66 +104,63 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 - Existing code can be adapted
 :::
 
-## 50 apps published in 2023 were surveyed to determine current practices
+## Current apps do not follow best practices 
+<img src="images/app_features.svg" class="centre_image" alt = "A bargraph showing the results of surveying 50 published apps for features: citing packages in the paper, citing packages in the app, instructions included in the app, logging, reproducibility, saving and loading. Then whether the source code was available, whether it contained functions, was modular, formatted as a package and contained unit and end-to-end tests. Apart from citing packages in the paper and source code being available, the majority of apps lacked features.">
 
-<img src="images/app_features.svg" class="centre_image" >
+## Wallace bucked the trend
+<img src="images/wallace.png" class="centre_image" alt = "A screenshot of the Wallace app used to model species distributions. A sidebar shows that an option to load occurrence data from a database is selected and the species Paraponera clavata is selected with the point data where the species has been observed plotted on the map.">
 
-## Wallace is an app for modelling species distributions
-<img src="images/wallace.png" class="centre_image" >
+::: footer
+- Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a> `install.packages("wallace")` (not online)
+:::
 
-## Wallace is an app for modelling species distributions
-
--   In development since 2015 with two major releases
--   Feature-rich with many ideal characteristics:
-
-::: columns
-::: {.column width="50%"}
+::: notes
 -   Error messages
 -   Logging
 -   Save and load
-:::
-::: {.column width="50%"}
 -   Reproducible
 -   Cites packages used
-:::
-:::
 
-::: footer
-- `install.packages("wallace")` (not online)
-- Kass *et al.* (2018) <a href="https://doi.org/10.1111/2041-210X.12945" target="_blank">DOI: 10.1111/2041-210X.12945</a>
-- Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a>
+- Take the lessons learnt from them and make available to all
+- We were going to reuse Wallace as the basis for a new app, so it seemed to make sense to make it available to others
+- Lead onto modules here - i.e. occ_queryDb
 :::
 
-## `create_template()` creates an empty app {.mediumcode}
+## `modules` contains information about each module {.mediumcode}
 
-```{r eval = FALSE, echo = TRUE}
-
-common_objects = c("raster", "histogram", "scatter")
-
-shinyscholar::create_template(
-  path = file.path("~", "Documents"), name = "demo", author = "Simon Smart",
-  include_map = TRUE, include_table = TRUE, include_code = TRUE, 
-  common_objects = common_objects, modules = modules, install = TRUE)
-
-demo::run_demo()
+```{r eval = TRUE, echo = FALSE}
+modules <- data.frame(
+"component" = "transform",
+"long_component" = "Transform numbers",
+"module" = "multiply",
+"long_module" = "Multiply a number",
+"map" = FALSE,
+"result" = TRUE,
+"rmd" = TRUE,
+"save" = TRUE,
+"download" = FALSE,
+"async" = FALSE)
 ```
 
-## `create_template()` creates an empty app {.mediumcode}
+```{r val = TRUE, echo = FALSE}
+knitr::kable(modules, format = "html")
+```
+
+## `create_template()` creates the skeleton app {.mediumcode}
 
 ```{r eval = TRUE, echo = FALSE}
 
 modules <- data.frame(
-"component" = c("load", "load", "plot", "plot"),
-"long_component" = c("Load data", "Load data", "Plot data", "Plot data"),
-"module" = c("user", "database", "histogram", "scatter"),
-"long_module" = c("Upload your own data", "Query a database to obtain data", 
-                  "Plot the data as a histogram", "Plot the data as a scatterplot"),
-"map" = c(TRUE, TRUE, FALSE, FALSE),
-"result" = c(FALSE, FALSE, TRUE, TRUE),
-"rmd" = c(TRUE, TRUE, TRUE, TRUE),
-"save" = c(TRUE, TRUE, TRUE, TRUE),
-"download" = c(FALSE, FALSE, TRUE, TRUE),
-"async" = c(FALSE, TRUE, FALSE, FALSE))
+"component" = "transform",
+"long_component" = "Transform numbers",
+"module" = "multiply",
+"long_module" = "Multiply a number",
+"map" = FALSE,
+"result" = TRUE,
+"rmd" = TRUE,
+"save" = TRUE,
+"download" = FALSE,
+"async" = FALSE)
 
 ```
 
@@ -165,18 +168,53 @@ modules <- data.frame(
 knitr::kable(modules, format = "html")
 ```
 
+</br>
+```{r eval = FALSE, echo = TRUE}
+shinyscholar::create_template(
+  path = file.path("~", "Documents"), 
+  name = "demo", 
+  author = "Simon Smart",
+  include_map = FALSE, 
+  include_table = FALSE, 
+  include_code = FALSE, 
+  common_objects = "result", 
+  modules = modules, 
+  install = TRUE)
+
+demo::run_demo()
+```
+
 ## `create_template()` creates an empty app
 
-<img src="images/demo_app.png" class="centre_image" alt="A screenshot of the app running after running the create_template function. A navigation bar at the top enables navigation between components and a menu in the sidebar enables navigation between modules. A logger window is present towards the top of the display and a world map is shown in the main panel." >
+<img src="images/demo_app.png" class="centre_image" alt="A screenshot of the app running after running the create_template function. A navigation bar at the top enables navigation between components and a menu in the sidebar enables navigation between modules. A logger window is present towards the top of the display and an empty results tab shown in the main panel." >
 
-## Reproducibiity
+## Reproducibiity relies on each module calling one function {.largecode}
 
-- Each module calls one function
+- Create the function:
+```{r echo = TRUE, eval=FALSE}
+transform_multiply <- function(number) number * 10
+```
+
+- Use it in the module and store the input:
+```{r echo = TRUE, eval=FALSE}
+common$result <- transform_multiply(input$number)
+common$meta$transform_multiply$number <- input$number
+```
+
+- In the Rmarkdown
+```{r echo = TRUE, eval=FALSE}
+result <- transform_multiply({{transform_multiply_number}})
+```
+
+- `metadata()` takes care of a lot of the boring code
+
+::: notes
 - Input values are stored and incorporated into Rmarkdown
 - Rerunning it outside the app produces the same results
-- `metadata()` takes care of a lot of the boring work
 
-## Disagapp
+:::
+
+## Disagapp for disaggregation regression
 
 ::: columns
 ::: {.column width="80%"}
@@ -187,11 +225,11 @@ knitr::kable(modules, format = "html")
 :::
 :::
 
-## MetaInsight
+## MetaInsight for network metaanalysis
 
 ::: columns
 ::: {.column width="80%"}
-<img src="images/metainsight.png">
+<img src="images/metainsight.png", alt="Screenshot of the metainsight app, displaying two forest plots">
 :::
 ::: {.column width="20%"}
 <img src="images/metainsight_qr.png" alt="QR code to https://crsu.shinyapps.io/MetaInsight_Scholar/">
@@ -216,8 +254,8 @@ knitr::kable(modules, format = "html")
 
 ::: {.column width="50%"}
 <div> 
-<img src="images/wellcome_logo.png" width="300" style = "display: block;", alt = "Wellcome logo">
-<img src="images/wallace_logo.png" width="300" style = "display: block;", alt = "Wallace hex logo">
+<img src="images/wellcome_logo.png" width="300" style = "display: block;" alt = "Wellcome logo">
+<img src="images/wallace_logo.png" width="300" style = "display: block;" alt = "Wallace hex logo">
 </div>
 :::
 :::
