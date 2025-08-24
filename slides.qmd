@@ -7,13 +7,25 @@ format:
     logo: images/uol_logo.png
     code-line-numbers: false
     theme: [default, custom.scss]
-    chalkboard: true
     width: 1600  
     height: 900
     scale: true
     slide-number: true
-date: "9 September 2025"
+date: "2025-09-09"
+date-format: "Do MMMM YYYY"
 ---
+
+## Shinyscholar helps create reproducible analytical apps in R {.mediumtext}
+
+::: columns
+::: {.column width="70%"}
+-   Creates an empty application with a regular structure
+-   Analyses can be reproduced outside the app
+:::
+::: {.column width="30%"}
+<img src="images/ss_logo.png" width="auto" height="auto" align="right" alt="Hex logo of shinyscholar showing a black and white mortar cap">
+:::
+:::
 
 ## Shinyscholar helps create reproducible analytical apps in R {.mediumtext}
 
@@ -35,17 +47,31 @@ Testing, modularised, maintainable
 
 :::
 
-## R is very powerful but barriers can restrict uptake
+## R has cutting-edge statistical methods but barriers can restrict uptake
 
-- The R ecosystem has cutting-edge statistical methods
-- Have to know how to use R
-- Need access to specific data
-- Data needs to be formatted in specific ways
+- Know how to use R 
+
+## R has cutting-edge statistical methods but barriers can restrict uptake
+
+- Know how to use R 
+- Able to comprehend documentation
+
+## R has cutting-edge statistical methods but barriers can restrict uptake
+
+- Know how to use R 
+- Able to comprehend documentation
+- Access to specific data
+
+## R has cutting-edge statistical methods but barriers can restrict uptake
+
+- Know how to use R 
+- Able to comprehend documentation
+- Access to specific data
+- Format data in specific ways
 
 ::: notes
 
 Especially targeting technical users, but who might not code. Conservationists, analysts, medical practitioners 
-
 :::
 
 ## Shiny apps enable anybody to access the power of R {.mediumcode}
@@ -78,11 +104,10 @@ shinyApp(ui, server)
 ::: {.column width="55%"}
 -   The low barrier to entry makes Shiny popular
 -   Substantially increased apps as a method of dissemination
--   "shiny app" or "shiny application" in Web of Science:
 :::
 
 ::: {.column width="45%"}
-<img src="images/published_apps.png" alt="A scatterplot showing the number of publications mentioning shiny apps from 2015 to 2023 showing exponential growth up to 134 papers in 2023.">
+<img src="images/published_apps.png" height = "650px" alt="A scatterplot showing the number of publications mentioning shiny apps from 2015 to 2023 showing exponential growth up to 134 papers in 2023.">
 
 ```{r echo = FALSE, fig.height=10}
 # year <- c(2012, 2015:2023)
@@ -107,12 +132,10 @@ shinyApp(ui, server)
 ## Current apps do not follow best practices 
 <img src="images/app_features.svg" class="centre_image" alt = "A bargraph showing the results of surveying 50 published apps for features: citing packages in the paper, citing packages in the app, instructions included in the app, logging, reproducibility, saving and loading. Then whether the source code was available, whether it contained functions, was modular, formatted as a package and contained unit and end-to-end tests. Apart from citing packages in the paper and source code being available, the majority of apps lacked features.">
 
-## Wallace bucked the trend
-<img src="images/wallace.png" class="centre_image" alt = "A screenshot of the Wallace app used to model species distributions. A sidebar shows that an option to load occurrence data from a database is selected and the species Paraponera clavata is selected with the point data where the species has been observed plotted on the map.">
+## Wallace bucked the trend {.smalltext}
+<img src="images/wallace.png" class="centre_image" alt = "A screenshot of the Wallace app used to model species distributions. A sidebar shows that an option to load occurrence data from a database is selected and the species Paraponera clavata is selected with the point data where the species has been observed plotted on the map." height = 700>
 
-::: footer
-- Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a> `install.packages("wallace")` (not online)
-:::
+Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a> `install.packages("wallace")` (not online)
 
 ::: notes
 -   Error messages
@@ -128,7 +151,7 @@ shinyApp(ui, server)
 
 ## `modules` contains information about each module {.mediumcode}
 
-```{r eval = TRUE, echo = FALSE}
+```{r eval = FALSE, echo = TRUE}
 modules <- data.frame(
 "component" = "transform",
 "long_component" = "Transform numbers",
@@ -140,35 +163,10 @@ modules <- data.frame(
 "save" = TRUE,
 "download" = FALSE,
 "async" = FALSE)
-```
-
-```{r val = TRUE, echo = FALSE}
-knitr::kable(modules, format = "html")
 ```
 
 ## `create_template()` creates the skeleton app {.mediumcode}
 
-```{r eval = TRUE, echo = FALSE}
-
-modules <- data.frame(
-"component" = "transform",
-"long_component" = "Transform numbers",
-"module" = "multiply",
-"long_module" = "Multiply a number",
-"map" = FALSE,
-"result" = TRUE,
-"rmd" = TRUE,
-"save" = TRUE,
-"download" = FALSE,
-"async" = FALSE)
-
-```
-
-```{r val = TRUE, echo = FALSE}
-knitr::kable(modules, format = "html")
-```
-
-</br>
 ```{r eval = FALSE, echo = TRUE}
 shinyscholar::create_template(
   path = file.path("~", "Documents"), 
@@ -184,41 +182,74 @@ shinyscholar::create_template(
 demo::run_demo()
 ```
 
-## `create_template()` creates an empty app
+## `create_template()` creates the skeleton app
 
 <img src="images/demo_app.png" class="centre_image" alt="A screenshot of the app running after running the create_template function. A navigation bar at the top enables navigation between components and a menu in the sidebar enables navigation between modules. A logger window is present towards the top of the display and an empty results tab shown in the main panel." >
 
-## Reproducibiity relies on each module calling one function {.largecode}
+## Reproducibility relies on each module calling one function {.mediumcode}
 
-- Create the function:
+Create the function:
 ```{r echo = TRUE, eval=FALSE}
 transform_multiply <- function(number) number * 10
 ```
 
-- Use it in the module and store the input:
+## Reproducibility relies on each module calling one function {.mediumcode}
+
+Create the function:
+```{r echo = TRUE, eval=FALSE}
+transform_multiply <- function(number) number * 10
+```
+
+Use it in the module and store the input:
 ```{r echo = TRUE, eval=FALSE}
 common$result <- transform_multiply(input$number)
 common$meta$transform_multiply$number <- input$number
 ```
 
-- In the Rmarkdown
+## Reproducibility relies on each module calling one function {.mediumcode}
+
+Create the function:
+```{r echo = TRUE, eval=FALSE}
+transform_multiply <- function(number) number * 10
+```
+
+Use it in the module and store the input:
+```{r echo = TRUE, eval=FALSE}
+common$result <- transform_multiply(input$number)
+common$meta$transform_multiply$number <- input$number
+```
+
+In the Rmarkdown:
 ```{r echo = TRUE, eval=FALSE}
 result <- transform_multiply({{transform_multiply_number}})
 ```
 
-- `metadata()` takes care of a lot of the boring code
+## Reproducibility relies on each module calling one function {.mediumcode}
 
-::: notes
-- Input values are stored and incorporated into Rmarkdown
-- Rerunning it outside the app produces the same results
+Create the function:
+```{r echo = TRUE, eval=FALSE}
+transform_multiply <- function(number) number * 10
+```
 
-:::
+Use it in the module and store the input:
+```{r echo = TRUE, eval=FALSE}
+common$result <- transform_multiply(input$number)
+common$meta$transform_multiply$number <- input$number
+```
+
+In the Rmarkdown:
+```{r echo = TRUE, eval=FALSE}
+result <- transform_multiply({{transform_multiply_number}})
+```
+
+`metadata()` takes care of a lot of the boring code
+
 
 ## Disagapp for disaggregation regression
 
 ::: columns
 ::: {.column width="80%"}
-<img src="images/disagapp.png" alt="Screenshot of the disagapp app, displaying cases of Malaria in provinces of Madagascar">
+<img src="images/disagapp.png" height = "700px" alt="Screenshot of the disagapp app, displaying cases of Malaria in provinces of Madagascar">
 :::
 ::: {.column width="20%"}
 <img src="images/disagapp_qr.png" alt="QR code to https://disagapp.le.ac.uk" >
@@ -229,7 +260,7 @@ result <- transform_multiply({{transform_multiply_number}})
 
 ::: columns
 ::: {.column width="80%"}
-<img src="images/metainsight.png", alt="Screenshot of the metainsight app, displaying two forest plots">
+<img src="images/metainsight.png" alt="Screenshot of the metainsight app, displaying two forest plots">
 :::
 ::: {.column width="20%"}
 <img src="images/metainsight_qr.png" alt="QR code to https://crsu.shinyapps.io/MetaInsight_Scholar/">
@@ -238,21 +269,21 @@ result <- transform_multiply({{transform_multiply_number}})
 
 ## Learn more
 
-- Install with `install.packages("shinyscholar")`
-- Example app at https://simonsmart.shinyapps.io/shinyscholar/ 
+- `install.packages("shinyscholar")`
+- Example app at https://simonsmart.shinyapps.io/shinyscholar/ `install.packages("shinyscholar", dependencies = TRUE)`
 - README guide to development at https://simon-smart88.github.io/shinyscholar/
 - <a href = "https://sites.google.com/view/dariia-mykhailyshyna/main/r-workshops-for-ukraine#h.svl2ujruwf92">Workshop for Ukraine</a>
 
 ## Acknowledgments
 
 ::: columns
-::: {.column width="50%"}
--   Wellcome
--   Wallace developers
+::: {.column width="70%"}
+-   Wellcome for funding
+-   Wallace developers especially Rob Anderson
 -   Tim Lucas
 :::
 
-::: {.column width="50%"}
+::: {.column width="30%"}
 <div> 
 <img src="images/wellcome_logo.png" width="300" style = "display: block;" alt = "Wellcome logo">
 <img src="images/wallace_logo.png" width="300" style = "display: block;" alt = "Wallace hex logo">
